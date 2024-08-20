@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pickle_ball/utils/assets_utils.dart';
-
 import '../../../common/widgets/text_button_widget.dart';
 import '../../../common/widgets/text_form_field.dart';
 import '../../../utils/color_utils.dart';
@@ -45,15 +42,8 @@ class _SignInViewState extends State<SignInView> {
                   AssetUtils.imgHeader,
                   height: 70.h,
                 ),
-                Text(
-                  'Enter your account to continue',
-                  style: TextStyle(
-                    color: ColorUtils.textColor,
-                    fontSize: 14,
-                  ),
-                ),
                 SizedBox(
-                  height: 10.h,
+                  height: 20.h,
                 ),
                 SizedBox(
                   height: 20.h,
@@ -75,7 +65,7 @@ class _SignInViewState extends State<SignInView> {
                   obscureText: true,
                   suffixIcon: IconButton(
                     onPressed: () => {},
-                    icon: Icon(Icons.visibility),
+                    icon: const Icon(Icons.visibility),
                   ),
                 ),
                 SizedBox(
@@ -83,19 +73,12 @@ class _SignInViewState extends State<SignInView> {
                 ),
                 TextButtonWidget(
                   label: 'Login',
-                  onPressed: () {},
+                  onPressed: () {
+                    Routes.goToBottomNavigatorScreen(context);
+                  },
                 ),
                 SizedBox(
-                  height: 20.h,
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                SizedBox(
-                  height: 20.h,
+                  height: 40.h,
                 ),
                 Align(
                   alignment: Alignment.centerRight,

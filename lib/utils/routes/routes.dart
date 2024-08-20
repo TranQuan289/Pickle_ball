@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pickle_ball/views/bottom_navigator/bottom_navigator_view.dart';
 import '../../views/auth/sign_in/sign_in_view.dart';
 import '../../views/auth/sign_up/sign_up_view.dart';
 import 'routes_name.dart';
@@ -14,10 +15,10 @@ class Routes {
         return MaterialPageRoute(
           builder: (BuildContext context) => const SignUpView(),
         );
-      // case RoutesName.bottomNavigator:
-      //   return MaterialPageRoute(
-      //     builder: (BuildContext context) => const BottomNavigationView(),
-      //   );
+      case RoutesName.bottomNavigator:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const BottomNavigationView(),
+        );
       default:
         return MaterialPageRoute(builder: (_) {
           return const Scaffold(
