@@ -10,4 +10,7 @@ class AssetUtils {
   static const chatActive = 'assets/icons/ic_chat_active.svg';
   static const search = 'assets/icons/ic_search.svg';
   static const searchActive = 'assets/icons/ic_search_active.svg';
+  static const imgHeader = 'assets/images/img_header.png';
+  static const imgSignIn = 'assets/images/img_sign_in.png';
+  static const imgSignUp = 'assets/images/img_sign_up.jpg';
 }

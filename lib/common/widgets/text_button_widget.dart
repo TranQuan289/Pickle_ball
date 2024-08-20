@@ -18,7 +18,7 @@ class TextButtonWidget extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith(
-          (states) => ColorUtils.primaryColor,
+          (states) => ColorUtils.greenColor,
         ),
         minimumSize: MaterialStateProperty.resolveWith(
           (states) => const Size(double.infinity, 60),

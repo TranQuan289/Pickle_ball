@@ -35,7 +35,7 @@ class TextFormFieldCustomWidget extends StatelessWidget {
         Text(
           label ?? '',
           style: TextStyle(
-            color: ColorUtils.primaryColor,
+            color: Colors.white,
             fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
@@ -50,6 +50,7 @@ class TextFormFieldCustomWidget extends StatelessWidget {
           keyboardType: textInputType,
           textInputAction: inputAction,
           validator: validator,
+          style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             hintText: hint,
             contentPadding: EdgeInsets.symmetric(
@@ -58,20 +59,22 @@ class TextFormFieldCustomWidget extends StatelessWidget {
             ),
             suffixIcon: suffixIcon ?? const SizedBox(),
             hintStyle: TextStyle(
-              color: ColorUtils.textColor,
+              color: Colors.grey,
               fontSize: 14.sp,
             ),
+            fillColor: Colors.white,
+            filled: true,
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: BorderSide(
-                color: ColorUtils.primaryColor,
+                color: ColorUtils.grayColor,
                 width: 1,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: BorderSide(
-                color: ColorUtils.blueLightColor,
+                color: ColorUtils.grayColor,
                 width: 1,
               ),
             ),
