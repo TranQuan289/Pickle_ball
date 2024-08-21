@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../utils/color_utils.dart';
 
-class TextFormFieldCustomWidget extends StatelessWidget {
+class TextFormFieldAuthWidget extends StatelessWidget {
   final String? hint;
   final String? label;
   final TextEditingController? controller;
@@ -13,10 +13,8 @@ class TextFormFieldCustomWidget extends StatelessWidget {
   final Function(String value)? onChanged;
   final TextInputType? textInputType;
   final String? Function(String?)? validator;
-  final bool? requiedText;
-  final int maxLine;
 
-  const TextFormFieldCustomWidget({
+  const TextFormFieldAuthWidget({
     super.key,
     this.hint,
     this.label,
@@ -27,8 +25,6 @@ class TextFormFieldCustomWidget extends StatelessWidget {
     this.inputAction,
     this.textInputType,
     this.validator,
-    this.requiedText,
-    this.maxLine = 1,
   });
 
   @override
@@ -36,23 +32,13 @@ class TextFormFieldCustomWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              label ?? '',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            requiedText ?? false
-                ? const Text(
-                    ' *',
-                    style: TextStyle(color: Colors.red),
-                  )
-                : const SizedBox.shrink()
-          ],
+        Text(
+          label ?? '',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         SizedBox(
           height: 5.h,
@@ -64,7 +50,6 @@ class TextFormFieldCustomWidget extends StatelessWidget {
           keyboardType: textInputType,
           textInputAction: inputAction,
           validator: validator,
-          maxLines: maxLine,
           style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             hintText: hint,

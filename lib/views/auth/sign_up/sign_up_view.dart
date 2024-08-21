@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pickle_ball/common/widgets/text_form_field_auth.dart';
 import 'package:pickle_ball/utils/assets_utils.dart';
-
 import '../../../common/widgets/text_button_widget.dart';
-import '../../../common/widgets/text_form_field.dart';
 import '../../../utils/color_utils.dart';
 import '../../../utils/routes/routes.dart';
 
@@ -57,7 +56,7 @@ class _SignUpViewState extends State<SignUpView> {
                 SizedBox(
                   height: 10.h,
                 ),
-                TextFormFieldCustomWidget(
+                TextFormFieldAuthWidget(
                   hint: 'Your full name',
                   label: "User Name",
                   controller: emailController,
@@ -66,7 +65,7 @@ class _SignUpViewState extends State<SignUpView> {
                 SizedBox(
                   height: 20.h,
                 ),
-                TextFormFieldCustomWidget(
+                TextFormFieldAuthWidget(
                   hint: 'Your email address',
                   label: "Email address",
                   inputAction: TextInputAction.next,
@@ -75,7 +74,7 @@ class _SignUpViewState extends State<SignUpView> {
                 SizedBox(
                   height: 20.h,
                 ),
-                TextFormFieldCustomWidget(
+                TextFormFieldAuthWidget(
                   hint: 'Your phone number',
                   label: "Phone number",
                   inputAction: TextInputAction.next,
@@ -85,7 +84,7 @@ class _SignUpViewState extends State<SignUpView> {
                 SizedBox(
                   height: 20.h,
                 ),
-                TextFormFieldCustomWidget(
+                TextFormFieldAuthWidget(
                   hint: 'Your password',
                   label: "Password",
                   controller: emailController,

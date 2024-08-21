@@ -44,8 +44,8 @@ class _BottomNavigationViewState
               controller: _pageController,
               children: const [
                 HomeView(),
-                FindTournamentView(),
                 CreateTournamentView(),
+                FindTournamentView(),
                 ProfileView(),
               ],
             );

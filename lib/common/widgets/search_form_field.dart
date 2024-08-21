@@ -30,7 +30,7 @@ class SearchFormField extends StatelessWidget {
       children: [
         TextFormField(
           focusNode: focusNode,
-          autofocus: true,
+          autofocus: false,
           controller: controller,
           onChanged: onChanged,
           textInputAction: inputAction,
@@ -46,7 +46,7 @@ class SearchFormField extends StatelessWidget {
               color: ColorUtils.textColor,
               fontSize: 14.sp,
             ),
-            filled: true, 
+            filled: true,
             fillColor: Colors.white,
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),

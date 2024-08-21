@@ -14,4 +14,8 @@ class AssetUtils {
   static const imgSignIn = 'assets/images/img_sign_in.png';
   static const imgSignUp = 'assets/images/img_sign_up.jpg';
   static const imgHome = 'assets/images/img_home.png';
+  static const icCamera = 'assets/icons/ic_camera.svg';
+  static const icGallery = 'assets/icons/ic_gallery.svg';
+  static const icUser = 'assets/icons/ic_user_account.svg';
+  static const imgHeaderFind = 'assets/images/img_header_find.png';
 }

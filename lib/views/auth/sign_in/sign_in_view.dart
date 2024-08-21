@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pickle_ball/common/widgets/text_form_field_auth.dart';
 import 'package:pickle_ball/utils/assets_utils.dart';
 import '../../../common/widgets/text_button_widget.dart';
-import '../../../common/widgets/text_form_field.dart';
 import '../../../utils/color_utils.dart';
 import '../../../utils/routes/routes.dart';
 
@@ -48,7 +48,7 @@ class _SignInViewState extends State<SignInView> {
                 SizedBox(
                   height: 20.h,
                 ),
-                TextFormFieldCustomWidget(
+                TextFormFieldAuthWidget(
                   hint: 'UserName',
                   label: "User Name",
                   inputAction: TextInputAction.next,
@@ -57,7 +57,7 @@ class _SignInViewState extends State<SignInView> {
                 SizedBox(
                   height: 20.h,
                 ),
-                TextFormFieldCustomWidget(
+                TextFormFieldAuthWidget(
                   hint: 'Your password',
                   label: "Password",
                   controller: emailController,
