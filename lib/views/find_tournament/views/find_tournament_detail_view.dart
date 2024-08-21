@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pickle_ball/utils/assets_utils.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
+import 'package:pickle_ball/views/find_tournament/views/competition_format_view.dart';
+import 'package:pickle_ball/views/find_tournament/views/competitors_view.dart';
 
 class FindTournamentDetailView extends ConsumerStatefulWidget {
   const FindTournamentDetailView({Key? key}) : super(key: key);
@@ -51,94 +53,7 @@ class _FindTournamentDetailViewState
                 const SizedBox(
                   height: 20,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(
-                          Icons.arrow_back_ios_sharp,
-                          color: Colors.white,
-                        )),
-                    ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      child: Image.asset(
-                        AssetUtils.imgSignIn,
-                        height: 70,
-                        width: 70,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const SizedBox(
-                      width: 250,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Pickle Ball Tournament',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            'Rounds and Knockout | Pickle Ball',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.remove_red_eye_outlined,
-                                color: Colors.white,
-                                size: 15,
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Text(
-                                '12',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 30,
-                              ),
-                              Icon(
-                                Icons.person_2_outlined,
-                                color: Colors.white,
-                                size: 15,
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Text(
-                                '12',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                headerWidget(context),
                 TabBar(
                   dividerColor: Colors.white,
                   controller: _tabController,
@@ -167,8 +82,8 @@ class _FindTournamentDetailViewState
             child: TabBarView(
               controller: _tabController,
               children: const [
-                Center(child: Text('Competition Format Content')),
-                Center(child: Text('Competitors Content')),
+                CompetitionFormatView(),
+                CompetitorsView(),
                 Center(child: Text('Statics Content')),
                 Center(child: Text('Tournament Content')),
                 Center(child: Text('Schedule Content')),
@@ -178,6 +93,97 @@ class _FindTournamentDetailViewState
           ),
         ],
       ),
+    );
+  }
+
+  Row headerWidget(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back_ios_sharp,
+              color: Colors.white,
+            )),
+        ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(50)),
+          child: Image.asset(
+            AssetUtils.imgSignIn,
+            height: 70,
+            width: 70,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        const SizedBox(
+          width: 250,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                'Pickle Ball Tournament',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                'Rounds and Knockout | Pickle Ball',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.remove_red_eye_outlined,
+                    color: Colors.white,
+                    size: 15,
+                  ),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Text(
+                    '12',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Icon(
+                    Icons.person_2_outlined,
+                    color: Colors.white,
+                    size: 15,
+                  ),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Text(
+                    '12',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 

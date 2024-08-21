@@ -45,4 +45,3 @@ class FindTournamentView extends ConsumerWidget {
     );
   }
 }
-

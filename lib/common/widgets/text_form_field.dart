@@ -15,6 +15,7 @@ class TextFormFieldCustomWidget extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool? requiedText;
   final int maxLine;
+  final bool? readOnly;
 
   const TextFormFieldCustomWidget({
     super.key,
@@ -29,6 +30,7 @@ class TextFormFieldCustomWidget extends StatelessWidget {
     this.validator,
     this.requiedText,
     this.maxLine = 1,
+    this.readOnly,
   });
 
   @override
@@ -61,6 +63,7 @@ class TextFormFieldCustomWidget extends StatelessWidget {
           controller: controller,
           obscureText: obscureText ?? false,
           onChanged: onChanged,
+          readOnly: readOnly ?? false,
           keyboardType: textInputType,
           textInputAction: inputAction,
           validator: validator,
