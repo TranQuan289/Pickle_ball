@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pickle_ball/utils/assets_utils.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
+import 'package:pickle_ball/views/find_tournament/views/about_view.dart';
 import 'package:pickle_ball/views/find_tournament/views/competition_format_view.dart';
 import 'package:pickle_ball/views/find_tournament/views/competitors_view.dart';
 import 'package:pickle_ball/views/find_tournament/views/schedule_view.dart';
@@ -88,7 +89,7 @@ class _FindTournamentDetailViewState
                 Center(child: Text('Statics Content')),
                 Center(child: Text('Tournament Content')),
                 ScheduleView(),
-                Center(child: Text('About Content')),
+                AboutView(),
               ],
             ),
           ),
