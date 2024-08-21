@@ -5,6 +5,7 @@ import 'package:pickle_ball/utils/assets_utils.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
 import 'package:pickle_ball/views/find_tournament/views/competition_format_view.dart';
 import 'package:pickle_ball/views/find_tournament/views/competitors_view.dart';
+import 'package:pickle_ball/views/find_tournament/views/schedule_view.dart';
 
 class FindTournamentDetailView extends ConsumerStatefulWidget {
   const FindTournamentDetailView({Key? key}) : super(key: key);
@@ -86,7 +87,7 @@ class _FindTournamentDetailViewState
                 CompetitorsView(),
                 Center(child: Text('Statics Content')),
                 Center(child: Text('Tournament Content')),
-                Center(child: Text('Schedule Content')),
+                ScheduleView(),
                 Center(child: Text('About Content')),
               ],
             ),
