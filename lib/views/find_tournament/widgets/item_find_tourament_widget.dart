@@ -27,9 +27,10 @@ class ItemFindTouramentWidget extends StatelessWidget {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-                color: ColorUtils.grayColor.withOpacity(.3),
-                blurRadius: 3,
-                spreadRadius: 3),
+              color: ColorUtils.grayColor.withOpacity(.3),
+              blurRadius: 3,
+              spreadRadius: 3,
+            ),
           ],
         ),
         child: const ItemHeaderWidget(),
