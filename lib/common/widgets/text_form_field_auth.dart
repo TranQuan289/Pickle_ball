@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../utils/color_utils.dart';
+import 'package:pickle_ball/utils/color_utils.dart';
 
 class TextFormFieldAuthWidget extends StatelessWidget {
   final String? hint;
@@ -75,6 +74,20 @@ class TextFormFieldAuthWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               borderSide: BorderSide(
                 color: ColorUtils.grayColor,
+                width: 1,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                color: Colors.red,
+                width: 1,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                color: Colors.red,
                 width: 1,
               ),
             ),

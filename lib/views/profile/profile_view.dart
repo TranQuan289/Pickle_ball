@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pickle_ball/utils/assets_utils.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
+import 'package:pickle_ball/utils/routes/routes.dart';
 import 'package:pickle_ball/views/profile/widgets/button_settings_widget.dart';
 import 'package:pickle_ball/views/profile/views/profile_detail_view.dart';
 
@@ -99,6 +100,7 @@ class ProfileView extends ConsumerWidget {
                   color: Colors.black.withOpacity(0.7),
                 ),
                 title: 'Logout',
+                onPressed: () => Routes.goToSignInScreen(context),
               ),
               Container(
                 height: 1,

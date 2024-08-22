@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pickle_ball/common/widgets/text_form_field_auth.dart';
@@ -14,7 +15,10 @@ class SignUpView extends StatefulWidget {
   _SignUpViewState createState() => _SignUpViewState();
 }
 
+final TextEditingController nameController = TextEditingController();
 final TextEditingController emailController = TextEditingController();
+final TextEditingController phoneController = TextEditingController();
+final TextEditingController passwordController = TextEditingController();
 
 class _SignUpViewState extends State<SignUpView> {
   @override
@@ -59,7 +63,7 @@ class _SignUpViewState extends State<SignUpView> {
                 TextFormFieldAuthWidget(
                   hint: 'Your full name',
                   label: "User Name",
-                  controller: emailController,
+                  controller: nameController,
                   inputAction: TextInputAction.next,
                 ),
                 SizedBox(
@@ -70,6 +74,10 @@ class _SignUpViewState extends State<SignUpView> {
                   label: "Email address",
                   inputAction: TextInputAction.next,
                   controller: emailController,
+                  validator: (value) =>
+                      EmailValidator.validate(emailController.text)
+                          ? null
+                          : "Please enter a valid email",
                 ),
                 SizedBox(
                   height: 20.h,
@@ -78,7 +86,7 @@ class _SignUpViewState extends State<SignUpView> {
                   hint: 'Your phone number',
                   label: "Phone number",
                   inputAction: TextInputAction.next,
-                  controller: emailController,
+                  controller: phoneController,
                   textInputType: TextInputType.phone,
                 ),
                 SizedBox(
@@ -87,7 +95,7 @@ class _SignUpViewState extends State<SignUpView> {
                 TextFormFieldAuthWidget(
                   hint: 'Your password',
                   label: "Password",
-                  controller: emailController,
+                  controller: passwordController,
                   inputAction: TextInputAction.done,
                   obscureText: true,
                   suffixIcon: IconButton(
