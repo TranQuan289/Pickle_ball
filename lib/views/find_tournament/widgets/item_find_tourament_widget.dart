@@ -3,10 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
 import 'package:pickle_ball/views/find_tournament/views/find_tournament_detail_view.dart';
 import 'package:pickle_ball/views/find_tournament/widgets/item_header_widget.dart';
+import 'package:pickle_ball/models/find_tournament_model.dart';
 
-class ItemFindTouramentWidget extends StatelessWidget {
-  const ItemFindTouramentWidget({
+class ItemFindTournamentWidget extends StatelessWidget {
+  final FindTournamentModel tournament;
+
+  const ItemFindTournamentWidget({
     super.key,
+    required this.tournament,
   });
 
   @override
@@ -15,8 +19,7 @@ class ItemFindTouramentWidget extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => const FindTournamentDetailView()),
+          MaterialPageRoute(builder: (context) => FindTournamentDetailView()),
         );
       },
       child: Container(
@@ -33,7 +36,7 @@ class ItemFindTouramentWidget extends StatelessWidget {
             ),
           ],
         ),
-        child: const ItemHeaderWidget(),
+        child: ItemHeaderWidget(tournament: tournament),
       ),
     );
   }
