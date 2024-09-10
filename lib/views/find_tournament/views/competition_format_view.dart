@@ -5,9 +5,12 @@ import 'package:pickle_ball/common/widgets/text_form_field.dart';
 import 'package:pickle_ball/utils/assets_utils.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
 import 'package:pickle_ball/views/find_tournament/widgets/item_competition_format_widget.dart';
+import 'package:pickle_ball/providers/campaign_provider.dart';
 
 class CompetitionFormatView extends ConsumerWidget {
-  const CompetitionFormatView({super.key});
+  final int campaignId;
+
+  const CompetitionFormatView({super.key, required this.campaignId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,14 +20,26 @@ class CompetitionFormatView extends ConsumerWidget {
         padding: const EdgeInsets.only(left: 5, right: 5, bottom: 20).r,
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Wrap(
-                children: [
-                  ItemCompetitionFormatWidget(),
-                  ItemCompetitionFormatWidget(),
-                  ItemCompetitionFormatWidget(),
-                  ItemCompetitionFormatWidget(),
-                ],
+              Consumer(
+                builder: (context, ref, child) {
+                  final campaignAsyncValue =
+                      ref.watch(campaignProvider(campaignId));
+                  return campaignAsyncValue.when(
+                    data: (tournaments) {
+                      return Wrap(
+                        children: tournaments.map((tournament) {
+                          return ItemCompetitionFormatWidget(
+                            tournament: tournament,
+                          );
+                        }).toList(),
+                      );
+                    },
+                    loading: () => const CircularProgressIndicator(),
+                    error: (error, stack) => Text('Error: $error'),
+                  );
+                },
               ),
               Padding(
                 padding: const EdgeInsets.all(12),

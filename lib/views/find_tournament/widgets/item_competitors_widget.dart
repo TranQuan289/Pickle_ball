@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pickle_ball/utils/assets_utils.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
+import 'package:pickle_ball/models/campaign_model.dart';
 
 class ItemCompetitorsWidget extends StatelessWidget {
+  final Tournament tournament;
+
   const ItemCompetitorsWidget({
     super.key,
+    required this.tournament,
   });
 
   @override
@@ -24,9 +28,15 @@ class ItemCompetitorsWidget extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            AssetUtils.imgSignIn,
+          Image.network(
+            tournament.imageUrl ?? AssetUtils.imgSignIn,
             fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Image.asset(
+                AssetUtils.imgSignIn,
+                fit: BoxFit.cover,
+              );
+            },
           ),
           Positioned(
             bottom: 0,
@@ -48,7 +58,7 @@ class ItemCompetitorsWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Single",
+                    tournament.tournamentName ?? 'Unnamed Tournament',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -57,7 +67,7 @@ class ItemCompetitorsWidget extends StatelessWidget {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    'Rank: 4.0',
+                    'Rank: ${tournament.rank ?? 'N/A'}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -65,14 +75,14 @@ class ItemCompetitorsWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Male Player',
+                    'Format: ${tournament.formatType ?? 'N/A'}',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12.sp,
                     ),
                   ),
                   Text(
-                    'Type: Single, Dual, Male',
+                    'Type: ${tournament.tournamentType ?? 'N/A'}',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12.sp,

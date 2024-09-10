@@ -19,7 +19,9 @@ class ItemFindTournamentWidget extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => FindTournamentDetailView()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  FindTournamentDetailView(tournamentId: tournament.id)),
         );
       },
       child: Container(
