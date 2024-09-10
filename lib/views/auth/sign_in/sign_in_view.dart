@@ -5,21 +5,52 @@ import 'package:pickle_ball/utils/assets_utils.dart';
 import '../../../common/widgets/text_button_widget.dart';
 import '../../../utils/color_utils.dart';
 import '../../../utils/routes/routes.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../providers/auth_provider.dart';
 
-class SignInView extends StatefulWidget {
-  const SignInView({Key? key}) : super(key: key);
+class SignInView extends ConsumerStatefulWidget {
+  const SignInView({super.key});
 
   @override
-  _SignInViewState createState() => _SignInViewState();
+  ConsumerState<SignInView> createState() => _SignInViewState();
 }
 
-final TextEditingController nameController = TextEditingController();
-final TextEditingController passwordController = TextEditingController();
-final TextEditingController emailController = TextEditingController();
+class _SignInViewState extends ConsumerState<SignInView> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool _obscureText = true;
 
-class _SignInViewState extends State<SignInView> {
+  void _showMessage(String message, bool isError) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+      ),
+    );
+  }
+
+  Future<void> _login() async {
+    final authNotifier = ref.read(authProvider.notifier);
+    await authNotifier.login(
+      usernameController.text,
+      passwordController.text,
+    );
+
+    final authState = ref.read(authProvider);
+    if (authState.isAuthenticated) {
+      _showMessage('Login successful', false);
+      if (mounted) {
+        Routes.goToBottomNavigatorScreen(context);
+      }
+    } else if (authState.error != null) {
+      _showMessage('Login failed: ${authState.error}', true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -43,16 +74,13 @@ class _SignInViewState extends State<SignInView> {
                   height: 70.h,
                 ),
                 SizedBox(
-                  height: 20.h,
-                ),
-                SizedBox(
-                  height: 20.h,
+                  height: 40.h,
                 ),
                 TextFormFieldAuthWidget(
-                  hint: 'UserName',
-                  label: "User Name",
+                  hint: 'Username',
+                  label: "Username",
                   inputAction: TextInputAction.next,
-                  controller: emailController,
+                  controller: usernameController,
                 ),
                 SizedBox(
                   height: 20.h,
@@ -60,22 +88,25 @@ class _SignInViewState extends State<SignInView> {
                 TextFormFieldAuthWidget(
                   hint: 'Your password',
                   label: "Password",
-                  controller: emailController,
+                  controller: passwordController,
                   inputAction: TextInputAction.done,
-                  obscureText: true,
+                  obscureText: _obscureText,
                   suffixIcon: IconButton(
-                    onPressed: () => {},
-                    icon: const Icon(Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                    icon: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off),
                   ),
                 ),
                 SizedBox(
                   height: 50.h,
                 ),
                 TextButtonWidget(
-                  label: 'Login',
-                  onPressed: () {
-                    Routes.goToBottomNavigatorScreen(context);
-                  },
+                  label: authState.isLoading ? 'Logging in...' : 'Login',
+                  onPressed: authState.isLoading ? null : _login,
                 ),
                 SizedBox(
                   height: 40.h,
@@ -86,7 +117,7 @@ class _SignInViewState extends State<SignInView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Didn\'t you have a account? ',
+                        'Don\'t have an account? ',
                         style: TextStyle(
                           color: ColorUtils.textColor,
                           fontSize: 14,

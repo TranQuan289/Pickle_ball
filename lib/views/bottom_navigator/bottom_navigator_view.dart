@@ -4,9 +4,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pickle_ball/utils/assets_utils.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
 import 'package:pickle_ball/views/bottom_navigator/notifier/bottom_navigation_notifier.dart';
-import 'package:pickle_ball/views/create_tournament/create_tournament_view.dart';
 import 'package:pickle_ball/views/find_tournament/find_tournament_view.dart';
 import 'package:pickle_ball/views/home/home_view.dart';
+import 'package:pickle_ball/views/news/news_view.dart';
 import 'package:pickle_ball/views/profile/profile_view.dart';
 import '../../common/base_state_delegate/base_state_delegate.dart';
 
@@ -44,7 +44,8 @@ class _BottomNavigationViewState
               controller: _pageController,
               children: const [
                 HomeView(),
-                CreateTournamentView(),
+                // CreateTournamentView(),
+                NewsView(),
                 FindTournamentView(),
                 ProfileView(),
               ],
@@ -89,22 +90,39 @@ class _BottomNavigationViewState
                     ),
                     label: "home",
                   ),
+                  // BottomNavigationBarItem(
+                  //   icon: SvgPicture.asset(
+                  //     AssetUtils.create,
+                  //     colorFilter: ColorFilter.mode(
+                  //       ColorUtils.primaryColor,
+                  //       BlendMode.srcIn,
+                  //     ),
+                  //   ),
+                  //   activeIcon: SvgPicture.asset(
+                  //     AssetUtils.createActive,
+                  //     colorFilter: ColorFilter.mode(
+                  //       ColorUtils.primaryColor,
+                  //       BlendMode.srcIn,
+                  //     ),
+                  //   ),
+                  //   label: "Create",
+                  // ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(
-                      AssetUtils.create,
+                      AssetUtils.news,
                       colorFilter: ColorFilter.mode(
                         ColorUtils.primaryColor,
                         BlendMode.srcIn,
                       ),
                     ),
                     activeIcon: SvgPicture.asset(
-                      AssetUtils.createActive,
+                      AssetUtils.newsActive,
                       colorFilter: ColorFilter.mode(
                         ColorUtils.primaryColor,
                         BlendMode.srcIn,
                       ),
                     ),
-                    label: "Chat",
+                    label: "news",
                   ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(

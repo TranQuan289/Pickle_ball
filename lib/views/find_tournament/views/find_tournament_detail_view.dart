@@ -10,7 +10,7 @@ import 'package:pickle_ball/views/find_tournament/views/schedule_view.dart';
 import 'package:pickle_ball/views/find_tournament/views/tournament_view.dart';
 
 class FindTournamentDetailView extends ConsumerStatefulWidget {
-  const FindTournamentDetailView({Key? key}) : super(key: key);
+  const FindTournamentDetailView({super.key});
 
   @override
   ConsumerState<FindTournamentDetailView> createState() =>
@@ -67,7 +67,6 @@ class _FindTournamentDetailViewState
                   tabs: [
                     _buildTab('Competition Format'),
                     _buildTab('Competitors'),
-                    _buildTab('Statics'),
                     _buildTab('Tournament'),
                     _buildTab('Schedule'),
                     _buildTab('About'),
@@ -90,7 +89,6 @@ class _FindTournamentDetailViewState
               children: const [
                 CompetitionFormatView(),
                 CompetitorsView(),
-                Center(child: Text('Statics Content')),
                 TournamentView(),
                 ScheduleView(),
                 AboutView(),

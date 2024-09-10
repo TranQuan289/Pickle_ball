@@ -10,6 +10,8 @@ class AssetUtils {
   static const createActive = 'assets/icons/ic_create_active.svg';
   static const search = 'assets/icons/ic_search.svg';
   static const searchActive = 'assets/icons/ic_search_active.svg';
+  static const news = 'assets/icons/ic_news.svg';
+  static const newsActive = 'assets/icons/ic_news_active.svg';
   static const imgHeader = 'assets/images/img_header.png';
   static const imgSignIn = 'assets/images/img_sign_in.png';
   static const imgSignUp = 'assets/images/img_sign_up.jpg';
