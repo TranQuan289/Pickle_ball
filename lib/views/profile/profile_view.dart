@@ -93,13 +93,38 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                   : null,
                             ),
                             const SizedBox(height: 10),
-                            Text(
-                              userProfile.fullName ?? "Unknown",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.orange,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
+                            ShaderMask(
+                              shaderCallback: (Rect bounds) {
+                                return const LinearGradient(
+                                  colors: [Colors.yellow, Colors.red],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ).createShader(bounds);
+                              },
+                              child: AnimatedDefaultTextStyle(
+                                duration: const Duration(milliseconds: 500),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.5,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 8.0,
+                                      color: Colors.black.withOpacity(0.7),
+                                      offset: const Offset(3.0, 3.0),
+                                    ),
+                                    Shadow(
+                                      blurRadius: 8.0,
+                                      color: Colors.white.withOpacity(0.7),
+                                      offset: const Offset(-2.0, -2.0),
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  userProfile.fullName ?? "Unknown",
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 5),

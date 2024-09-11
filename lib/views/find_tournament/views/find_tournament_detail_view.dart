@@ -8,6 +8,8 @@ import 'package:pickle_ball/views/find_tournament/views/competition_format_view.
 import 'package:pickle_ball/views/find_tournament/views/competitors_view.dart';
 import 'package:pickle_ball/views/find_tournament/views/schedule_view.dart';
 import 'package:pickle_ball/views/find_tournament/views/tournament_view.dart';
+import 'package:pickle_ball/providers/find_tournament_provider.dart';
+import 'package:pickle_ball/models/find_tournament_model.dart';
 
 class FindTournamentDetailView extends ConsumerStatefulWidget {
   final int tournamentId;
@@ -28,6 +30,8 @@ class _FindTournamentDetailViewState
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
+    Future.microtask(
+        () => ref.read(findTournamentProvider.notifier).fetchTournaments());
   }
 
   @override
@@ -38,6 +42,10 @@ class _FindTournamentDetailViewState
 
   @override
   Widget build(BuildContext context) {
+    final findTournamentState = ref.watch(findTournamentProvider);
+    final FindTournamentModel? tournament = findTournamentState.tournaments
+        .firstWhere((t) => t.id == widget.tournamentId);
+
     return Scaffold(
       backgroundColor: ColorUtils.primaryBackgroundColor,
       body: Column(
@@ -61,7 +69,7 @@ class _FindTournamentDetailViewState
                 const SizedBox(
                   height: 20,
                 ),
-                headerWidget(context),
+                headerWidget(context, tournament),
                 TabBar(
                   dividerColor: Colors.white,
                   controller: _tabController,
@@ -106,7 +114,7 @@ class _FindTournamentDetailViewState
     );
   }
 
-  Row headerWidget(BuildContext context) {
+  Widget headerWidget(BuildContext context, FindTournamentModel? tournament) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,25 +127,33 @@ class _FindTournamentDetailViewState
             )),
         ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(50)),
-          child: Image.asset(
-            AssetUtils.imgSignIn,
+          child: Image.network(
+            tournament?.imageUrl ?? AssetUtils.imgSignIn,
             height: 70,
             width: 70,
             fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Image.asset(
+                AssetUtils.imgSignIn,
+                height: 70,
+                width: 70,
+                fit: BoxFit.cover,
+              );
+            },
           ),
         ),
         const SizedBox(
           width: 10,
         ),
-        const SizedBox(
+        SizedBox(
           width: 250,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                'Pickle Ball Tournament',
-                style: TextStyle(
+                tournament?.tournamentName ?? 'Tournament Name',
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -145,17 +161,17 @@ class _FindTournamentDetailViewState
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                'Rounds and Knockout | Pickle Ball',
+                tournament?.location ?? 'Location',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Row(
+              const Row(
                 children: [
                   Icon(
                     Icons.remove_red_eye_outlined,

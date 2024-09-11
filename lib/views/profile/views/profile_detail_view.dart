@@ -9,6 +9,9 @@ import 'package:pickle_ball/services/auth_service.dart';
 import 'package:pickle_ball/services/profile_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pickle_ball/providers/profile_provider.dart';
+import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ProfileDetailView extends ConsumerStatefulWidget {
   const ProfileDetailView({super.key});
@@ -27,6 +30,8 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
   String? userId;
   UserProfile? userProfile;
   bool isLoading = true;
+  File? _image;
+  String? _imageUrl;
 
   @override
   void initState() {
@@ -56,11 +61,72 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
   void _loadUserData() {
     if (userProfile != null) {
       nameController.text = userProfile!.fullName ?? '';
-      dobController.text = userProfile!.dateOfBirth ?? '';
+      dobController.text = _formatDate(userProfile!.dateOfBirth);
       emailController.text = userProfile!.email ?? '';
       phoneController.text = userProfile!.phoneNumber ?? '';
       addressController.text = userProfile!.address ?? '';
       genderController.text = userProfile!.gender ?? '';
+      _imageUrl = userProfile!.imageUrl;
+    }
+  }
+
+  String _formatDate(String? dateString) {
+    if (dateString == null || dateString.isEmpty) return '';
+    try {
+      final date = DateTime.parse(dateString);
+      return DateFormat('dd-MM-yyyy').format(date);
+    } catch (e) {
+      return dateString;
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        dobController.text = DateFormat('dd-MM-yyyy').format(picked);
+      });
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+      await _uploadImage();
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    if (_image == null) return;
+    try {
+      final profileService = ProfileService();
+      final imageUrl = await profileService.uploadImage(_image!);
+      if (imageUrl != null) {
+        setState(() {
+          _imageUrl = imageUrl;
+        });
+        // Update the user profile with the new image URL
+        final updatedProfile = {
+          ...userProfile!.toJson(),
+          'ImageUrl': imageUrl,
+        };
+        await profileService.updateUserProfile(
+            int.parse(userId!), updatedProfile);
+        // Refresh the profile data in the provider
+        ref.read(profileProvider(userId!).notifier).fetchUserProfile();
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error uploading image: $e')),
+      );
     }
   }
 
@@ -81,6 +147,7 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
       'Address': addressController.text,
       'Gender': genderController.text,
       'Status': 1,
+      'ImageUrl': _imageUrl,
     };
 
     try {
@@ -120,8 +187,10 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
                         onTap: () async =>
                             PopupUtils.showBottomSheetAddImageDialog(
                           context: context,
-                          onSelectPressedCamera: () {},
-                          onSelectPressedGallery: () {},
+                          onSelectPressedCamera: () =>
+                              _pickImage(ImageSource.camera),
+                          onSelectPressedGallery: () =>
+                              _pickImage(ImageSource.gallery),
                         ),
                         child: Align(
                           alignment: Alignment.center,
@@ -133,7 +202,20 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
                                   const BorderRadius.all(Radius.circular(10)),
                               border: Border.all(color: ColorUtils.greenColor),
                             ),
-                            child: const Icon(Icons.add),
+                            child: _image != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child:
+                                        Image.file(_image!, fit: BoxFit.cover),
+                                  )
+                                : userProfile!.imageUrl != null
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                            userProfile!.imageUrl!,
+                                            fit: BoxFit.cover),
+                                      )
+                                    : const Icon(Icons.add),
                           ),
                         ),
                       ),
@@ -151,6 +233,10 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
                       TextFormFieldCustomWidget(
                         label: 'Date of Birth',
                         controller: dobController,
+                        readOnly: true,
+                        suffixIcon: IconButton(
+                            onPressed: () => _selectDate(context),
+                            icon: Icon(Icons.calendar_today)),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your date of birth';
