@@ -29,7 +29,7 @@ class AboutView extends ConsumerWidget {
               ),
             ),
             const Text(
-              "bla bla bla bla bla",
+              "Tournament Location",
               style: TextStyle(),
             ),
             const SizedBox(
