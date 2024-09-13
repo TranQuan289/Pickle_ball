@@ -74,7 +74,7 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
     if (dateString == null || dateString.isEmpty) return '';
     try {
       final date = DateTime.parse(dateString);
-      return DateFormat('dd-MM-yyyy').format(date);
+      return DateFormat('yyyy-MM-dd').format(date); // Changed to ISO format
     } catch (e) {
       return dateString;
     }
@@ -89,7 +89,8 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
     );
     if (picked != null) {
       setState(() {
-        dobController.text = DateFormat('dd-MM-yyyy').format(picked);
+        dobController.text =
+            DateFormat('yyyy-MM-dd').format(picked); // Changed to ISO format
       });
     }
   }
@@ -113,14 +114,12 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
         setState(() {
           _imageUrl = imageUrl;
         });
-        // Update the user profile with the new image URL
         final updatedProfile = {
           ...userProfile!.toJson(),
           'ImageUrl': imageUrl,
         };
         await profileService.updateUserProfile(
             int.parse(userId!), updatedProfile);
-        // Refresh the profile data in the provider
         ref.read(profileProvider(userId!).notifier).fetchUserProfile();
       }
     } catch (e) {
@@ -141,7 +140,8 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
     final profileService = ProfileService();
     final updatedProfile = {
       'FullName': nameController.text,
-      'DateOfBirth': dobController.text,
+      'DateOfBirth': DateTime.parse(dobController.text)
+          .toIso8601String(), // Changed to ISO 8601 format
       'Email': emailController.text,
       'PhoneNumber': phoneController.text,
       'Address': addressController.text,
@@ -236,7 +236,7 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
                         readOnly: true,
                         suffixIcon: IconButton(
                             onPressed: () => _selectDate(context),
-                            icon: Icon(Icons.calendar_today)),
+                            icon: const Icon(Icons.calendar_today)),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your date of birth';

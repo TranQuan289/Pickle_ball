@@ -43,7 +43,7 @@ class _FindTournamentDetailViewState
   @override
   Widget build(BuildContext context) {
     final findTournamentState = ref.watch(findTournamentProvider);
-    final FindTournamentModel? tournament = findTournamentState.tournaments
+    final FindTournamentModel tournament = findTournamentState.tournaments
         .firstWhere((t) => t.id == widget.tournamentId);
 
     return Scaffold(
@@ -103,9 +103,9 @@ class _FindTournamentDetailViewState
                 CompetitorsView(
                   campaignId: widget.tournamentId,
                 ),
-                TournamentView(),
-                ScheduleView(),
-                AboutView(),
+                const TournamentView(),
+                const ScheduleView(),
+                const AboutView(),
               ],
             ),
           ),
