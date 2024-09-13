@@ -6,14 +6,38 @@ import 'package:pickle_ball/utils/assets_utils.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
 import 'package:pickle_ball/views/find_tournament/widgets/item_competition_format_widget.dart';
 import 'package:pickle_ball/providers/campaign_provider.dart';
+import 'package:pickle_ball/providers/comment_provider.dart';
+import 'package:intl/intl.dart';
 
-class CompetitionFormatView extends ConsumerWidget {
+class CompetitionFormatView extends ConsumerStatefulWidget {
   final int campaignId;
 
   const CompetitionFormatView({super.key, required this.campaignId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CompetitionFormatView> createState() =>
+      _CompetitionFormatViewState();
+}
+
+class _CompetitionFormatViewState extends ConsumerState<CompetitionFormatView> {
+  final TextEditingController _commentController = TextEditingController();
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    ref.read(commentProvider(widget.campaignId).notifier).fetchComments();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final comments = ref.watch(commentProvider(widget.campaignId));
+
     return Scaffold(
       backgroundColor: ColorUtils.primaryBackgroundColor,
       body: Padding(
@@ -25,7 +49,7 @@ class CompetitionFormatView extends ConsumerWidget {
               Consumer(
                 builder: (context, ref, child) {
                   final campaignAsyncValue =
-                      ref.watch(campaignProvider(campaignId));
+                      ref.watch(campaignProvider(widget.campaignId));
                   return campaignAsyncValue.when(
                     data: (tournaments) {
                       return Wrap(
@@ -55,7 +79,7 @@ class CompetitionFormatView extends ConsumerWidget {
                           width: 10,
                         ),
                         Text(
-                          'Comments (34)',
+                          'Comments (${comments.length})',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: ColorUtils.greenColor,
@@ -64,40 +88,68 @@ class CompetitionFormatView extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    const TextFormFieldCustomWidget(
+                    TextFormFieldCustomWidget(
+                      controller: _commentController,
                       hint: 'Write down your comment',
                       maxLine: 5,
                       inputAction: TextInputAction.done,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(50)),
-                            child: Image.asset(
-                              AssetUtils.imgSignIn,
-                              height: 40,
-                              width: 40,
-                              fit: BoxFit.cover,
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_commentController.text.isNotEmpty) {
+                          ref
+                              .read(commentProvider(widget.campaignId).notifier)
+                              .addComment(_commentController.text);
+                          _commentController.clear();
+                        }
+                      },
+                      child: const Text('Post Comment'),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: comments.length,
+                      itemBuilder: (context, index) {
+                        final comment = comments[index];
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: comment.imageUrl != null
+                                ? NetworkImage(comment.imageUrl!)
+                                : const AssetImage(AssetUtils.imgSignIn)
+                                    as ImageProvider,
+                          ),
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                comment.fullName ?? 'Anonymous',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                DateFormat('dd/MM/yyyy HH:mm')
+                                    .format(comment.createDate),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                          subtitle: Text(
+                            comment.commentText,
+                            style: const TextStyle(
+                              fontSize: 12,
                             ),
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Expanded(
-                            child: TextFormFieldCustomWidget(
-                              label: 'Trần Quân',
-                              hint: 'Write down your comment',
-                              readOnly: true,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                        );
+                      },
+                    ),
                   ],
                 ),
               )
