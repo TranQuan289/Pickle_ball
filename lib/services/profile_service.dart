@@ -19,8 +19,8 @@ class ProfileService {
 
   Future<void> updateUserProfile(int userId, Map<String, dynamic> data) async {
     try {
-      final formData = FormData.fromMap(data);
-      await _dio.put('$_baseUrl/users/$userId', data: formData);
+      // Remove FormData conversion, send data directly
+      await _dio.put('$_baseUrl/users/$userId', data: data);
     } catch (e) {
       throw Exception('Failed to update user profile');
     }

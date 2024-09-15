@@ -139,15 +139,14 @@ class _ProfileDetailViewState extends ConsumerState<ProfileDetailView> {
 
     final profileService = ProfileService();
     final updatedProfile = {
-      'FullName': nameController.text,
-      'DateOfBirth': DateTime.parse(dobController.text)
-          .toIso8601String(), // Changed to ISO 8601 format
-      'Email': emailController.text,
-      'PhoneNumber': phoneController.text,
-      'Address': addressController.text,
-      'Gender': genderController.text,
-      'Status': 1,
-      'ImageUrl': _imageUrl,
+      'fullName': nameController.text,
+      'dateOfBirth': dobController.text, // Keep as string, no parsing needed
+      'email': emailController.text,
+      'phoneNumber': phoneController.text,
+      'address': addressController.text,
+      'gender': genderController.text,
+      'status': 1, // Changed to int
+      'imageUrl': _imageUrl,
     };
 
     try {
