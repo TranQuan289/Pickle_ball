@@ -16,8 +16,10 @@ class SignInView extends ConsumerStatefulWidget {
 }
 
 class _SignInViewState extends ConsumerState<SignInView> {
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController =
+      TextEditingController(text: 'SystemManager');
+  final TextEditingController passwordController =
+      TextEditingController(text: '@@abc123@@');
   bool _obscureText = true;
 
   void _showMessage(String message, bool isError) {

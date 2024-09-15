@@ -2,9 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:pickle_ball/models/user_profile_model.dart';
 import 'dart:io';
 
+import 'package:pickle_ball/services/api_config.dart';
+
 class ProfileService {
   final Dio _dio = Dio();
-  final String _baseUrl = 'http://apis-pickleball.runasp.net/api';
+  final String _baseUrl = ApiConfig.fullUrl;
 
   Future<UserProfile> getUserProfile(int userId) async {
     try {

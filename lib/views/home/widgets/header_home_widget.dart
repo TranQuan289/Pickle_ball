@@ -18,9 +18,8 @@ class HeaderHomeWidget extends StatelessWidget {
         ),
       ),
       child: Container(
-        padding: const EdgeInsets.only(
-                top: 70, left: 30, right: 30, bottom: 20)
-            .r,
+        padding:
+            const EdgeInsets.only(top: 70, left: 30, right: 30, bottom: 20).r,
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 4, 39, 68).withOpacity(0.7),
         ),
@@ -92,7 +91,7 @@ class HeaderHomeWidget extends StatelessWidget {
                   ),
                   child: Image.asset(
                     AssetUtils.imgHome,
-                    height: 150.h,
+                    height: 140.h,
                   ),
                 )
               ],

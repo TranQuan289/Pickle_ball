@@ -48,7 +48,7 @@ class ItemHeaderWidget extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                tournament.location,
+                tournament.locations.first.courtGroupName,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

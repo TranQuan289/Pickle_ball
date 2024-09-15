@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:pickle_ball/models/comment_model.dart';
+import 'package:pickle_ball/services/api_config.dart';
 import 'package:pickle_ball/services/auth_service.dart';
 
 class CommentService {
-  static const String baseUrl = 'http://apis-pickleball.runasp.net';
+  static const String baseUrl = ApiConfig.baseUrl;
 
   Future<List<Comment>> getComments(int tournamentId) async {
     final response = await http.get(

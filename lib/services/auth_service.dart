@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:pickle_ball/services/api_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  static const String baseUrl = 'http://apis-pickleball.runasp.net';
+  static const String _baseUrl = ApiConfig.baseUrl;
 
   Future<String?> login(String username, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/api/accounts/user-login'),
+      Uri.parse('$_baseUrl/api/accounts/user-login'),
       headers: {'accept': '*/*', 'Content-Type': 'application/json'},
       body: json.encode({'userName': username, 'password': password}),
     );
@@ -67,7 +68,7 @@ class AuthService {
     required String gender,
   }) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/api/user-registration'),
+      Uri.parse('$_baseUrl/api/user-registration'),
       headers: {'accept': '*/*', 'Content-Type': 'application/json'},
       body: json.encode({
         'fullName': fullName,

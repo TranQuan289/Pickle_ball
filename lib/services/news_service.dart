@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:pickle_ball/models/news_model.dart';
+import 'package:pickle_ball/services/api_config.dart';
 
 class NewsService {
-  static const String _baseUrl = 'http://apis-pickleball.runasp.net/api';
+  static final String _endpoint = '${ApiConfig.fullUrl}/newarticle';
 
   Future<List<NewsModel>> getNews() async {
-    final response = await http.get(Uri.parse('$_baseUrl/newarticle'));
+    final response = await http.get(Uri.parse(_endpoint));
 
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);

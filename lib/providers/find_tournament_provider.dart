@@ -29,11 +29,14 @@ class FindTournamentNotifier extends StateNotifier<FindTournamentState> {
     if (query.isEmpty) {
       state = state.copyWith(tournaments: _allTournaments);
     } else {
-      final filteredTournaments = _allTournaments
-          .where((tournament) => tournament.tournamentName
-              .toLowerCase()
-              .contains(query.toLowerCase()))
-          .toList();
+      final filteredTournaments = _allTournaments.where((tournament) {
+        return tournament.tournamentName
+                .toLowerCase()
+                .contains(query.toLowerCase()) ||
+            tournament.locations.any((location) => location.courtGroupName
+                .toLowerCase()
+                .contains(query.toLowerCase()));
+      }).toList();
       state = state.copyWith(tournaments: filteredTournaments);
     }
   }

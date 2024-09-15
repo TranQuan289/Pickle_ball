@@ -50,6 +50,7 @@ dependencies:
   email_validator: ^3.0.0
   image_picker: ^0.8.7+5
   dio: ^5.7.0
+  flutter_html: ^3.0.0-alpha.5
 
 dev_dependencies:
   flutter_test:

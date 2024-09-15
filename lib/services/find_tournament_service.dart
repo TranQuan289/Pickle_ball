@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:pickle_ball/models/find_tournament_model.dart';
+import 'package:pickle_ball/services/api_config.dart';
 
 class FindTournamentService {
-  static const String _baseUrl = 'http://apis-pickleball.runasp.net/api';
+  static final String _baseUrl = ApiConfig.fullUrl;
 
   Future<List<FindTournamentModel>> getTournaments() async {
     final response = await http.get(Uri.parse('$_baseUrl/tournament-campaign'));

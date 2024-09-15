@@ -3,11 +3,11 @@ class FindTournamentModel {
   final String tournamentName;
   final DateTime startDate;
   final DateTime endDate;
-  final DateTime? registrationExpiredDate; // Updated to nullable
-  final String location; // Updated to non-nullable with default value
-  final DateTime creationDate; // New field
-  final DateTime? modificationDate; // New field
-  final DateTime? deletionDate; // New field
+  final DateTime? registrationExpiredDate;
+  final List<Location> locations; // Updated to List<Location>
+  final DateTime creationDate;
+  final DateTime? modificationDate;
+  final DateTime? deletionDate;
   final String imageUrl;
 
   FindTournamentModel({
@@ -15,33 +15,48 @@ class FindTournamentModel {
     required this.tournamentName,
     required this.startDate,
     required this.endDate,
-    this.registrationExpiredDate, // Updated to nullable
-    String? location, // Updated to nullable
-    required this.creationDate, // New field
-    this.modificationDate, // New field
-    this.deletionDate, // New field
+    this.registrationExpiredDate,
+    required this.locations, // Updated to required List<Location>
+    required this.creationDate,
+    this.modificationDate,
+    this.deletionDate,
     required this.imageUrl,
-  }) : location = location ?? ""; // Default to empty string if null
+  });
 
   factory FindTournamentModel.fromJson(Map<String, dynamic> json) {
     return FindTournamentModel(
       id: json['id'],
-      tournamentName:
-          json['tournamentName'] ?? "", // Default to empty string if null
+      tournamentName: json['tournamentName'],
       startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
       registrationExpiredDate: json['registrationExpiredDate'] != null
           ? DateTime.parse(json['registrationExpiredDate'])
-          : null, // Handle nullable
-      location: json['location'] ?? "", // Default to empty string if null
-      creationDate: DateTime.parse(json['creationDate']), // New field
+          : null,
+      locations: (json['location'] as List<dynamic>)
+          .map((loc) => Location.fromJson(loc))
+          .toList(),
+      creationDate: DateTime.parse(json['creationDate']),
       modificationDate: json['modificationDate'] != null
           ? DateTime.parse(json['modificationDate'])
-          : null, // Handle nullable
+          : null,
       deletionDate: json['deletionDate'] != null
           ? DateTime.parse(json['deletionDate'])
-          : null, // Handle nullable
-      imageUrl: json['imageUrl'] ?? "", // Default to empty string if null
+          : null,
+      imageUrl: json['imageUrl'],
+    );
+  }
+}
+
+class Location {
+  final int courtGroupId;
+  final String courtGroupName;
+
+  Location({required this.courtGroupId, required this.courtGroupName});
+
+  factory Location.fromJson(Map<String, dynamic> json) {
+    return Location(
+      courtGroupId: json['courtGroupId'],
+      courtGroupName: json['courtGroupName'],
     );
   }
 }

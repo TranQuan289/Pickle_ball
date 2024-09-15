@@ -161,7 +161,7 @@ class _FindTournamentDetailViewState
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                tournament?.location ?? 'Location',
+                tournament?.locations.first.courtGroupName ?? 'Location',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
