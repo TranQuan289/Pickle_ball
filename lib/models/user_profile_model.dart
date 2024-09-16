@@ -6,7 +6,7 @@ class UserProfile {
   final String? email;
   final String? phoneNumber;
   final String? gender;
-  final String? rank;
+  final int? rank;
   final String? imageUrl;
   final int status;
 
@@ -32,7 +32,7 @@ class UserProfile {
       email: json['email'] as String?,
       phoneNumber: json['phoneNumber'] as String?,
       gender: json['gender'] as String?,
-      rank: json['rank'] as String?,
+      rank: json['rank'] as int?,
       imageUrl: json['imageUrl'] as String?,
       status: json['status'] as int,
     );

@@ -3,6 +3,7 @@ import 'package:pickle_ball/models/user_profile_model.dart';
 import 'dart:io';
 
 import 'package:pickle_ball/services/api_config.dart';
+import 'package:pickle_ball/services/auth_service.dart';
 
 class ProfileService {
   final Dio _dio = Dio();
@@ -10,7 +11,17 @@ class ProfileService {
 
   Future<UserProfile> getUserProfile(int userId) async {
     try {
-      final response = await _dio.get('$_baseUrl/users/$userId');
+      final authService = AuthService();
+      final token = await authService.getToken();
+      final response = await _dio.get(
+        '$_baseUrl/users/$userId',
+        options: Options(
+          headers: {
+            'accept': 'text/plain',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
       return UserProfile.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to load user profile');
@@ -19,8 +30,18 @@ class ProfileService {
 
   Future<void> updateUserProfile(int userId, Map<String, dynamic> data) async {
     try {
-      // Remove FormData conversion, send data directly
-      await _dio.put('$_baseUrl/users/$userId', data: data);
+      final authService = AuthService();
+      final token = await authService.getToken();
+      await _dio.put(
+        '$_baseUrl/users/$userId',
+        data: data,
+        options: Options(
+          headers: {
+            'accept': 'text/plain',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
     } catch (e) {
       throw Exception('Failed to update user profile');
     }

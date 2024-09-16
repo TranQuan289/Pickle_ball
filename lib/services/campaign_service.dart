@@ -4,11 +4,11 @@ import 'package:pickle_ball/services/api_config.dart';
 import '../models/campaign_model.dart';
 
 class CampaignService {
-  static const String baseUrl = ApiConfig.baseUrl;
+  static final String baseUrl = ApiConfig.fullUrl;
 
   Future<List<Tournament>> getCampaign(int campaignId) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/campaign/$campaignId'),
+      Uri.parse('$baseUrl/tournament/campaign/$campaignId'),
       headers: {'accept': '*/*'},
     );
 

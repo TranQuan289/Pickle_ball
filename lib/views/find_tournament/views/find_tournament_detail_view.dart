@@ -6,8 +6,6 @@ import 'package:pickle_ball/utils/color_utils.dart';
 import 'package:pickle_ball/views/find_tournament/views/about_view.dart';
 import 'package:pickle_ball/views/find_tournament/views/competition_format_view.dart';
 import 'package:pickle_ball/views/find_tournament/views/competitors_view.dart';
-import 'package:pickle_ball/views/find_tournament/views/schedule_view.dart';
-import 'package:pickle_ball/views/find_tournament/views/tournament_view.dart';
 import 'package:pickle_ball/providers/find_tournament_provider.dart';
 import 'package:pickle_ball/models/find_tournament_model.dart';
 
@@ -29,7 +27,7 @@ class _FindTournamentDetailViewState
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     Future.microtask(
         () => ref.read(findTournamentProvider.notifier).fetchTournaments());
   }
@@ -77,8 +75,8 @@ class _FindTournamentDetailViewState
                   tabs: [
                     _buildTab('Competition Format'),
                     _buildTab('Competitors'),
-                    _buildTab('Tournament'),
-                    _buildTab('Schedule'),
+                    // _buildTab('Tournament'),
+                    // _buildTab('Schedule'),
                     _buildTab('About'),
                   ],
                   labelColor: Colors.white,
@@ -103,8 +101,8 @@ class _FindTournamentDetailViewState
                 CompetitorsView(
                   campaignId: widget.tournamentId,
                 ),
-                const TournamentView(),
-                const ScheduleView(),
+                // const TournamentView(),
+                // const ScheduleView(),
                 const AboutView(),
               ],
             ),
