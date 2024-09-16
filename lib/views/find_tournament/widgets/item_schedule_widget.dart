@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pickle_ball/utils/assets_utils.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
+import 'package:pickle_ball/models/pickleball_match_model.dart';
+import 'package:intl/intl.dart';
 
 class ItemScheduleWidget extends StatelessWidget {
+  final PickleballMatch match;
+
   const ItemScheduleWidget({
     super.key,
+    required this.match,
   });
 
   @override
@@ -33,7 +38,7 @@ class ItemScheduleWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "13",
+                DateFormat('HH').format(match.matchDate),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -42,7 +47,7 @@ class ItemScheduleWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                '00',
+                DateFormat('mm').format(match.matchDate),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: ColorUtils.primaryColor,
@@ -51,19 +56,20 @@ class ItemScheduleWidget extends StatelessWidget {
               )
             ],
           ),
-          const Text('Monday, 01/07'),
-          const SizedBox(
-            height: 10,
-          ),
+          Text(DateFormat('EEEE, dd/MM').format(match.matchDate)),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Text(
-                "Single",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: 20,
+              Expanded(
+                child: Text(
+                  match.firstTeam ?? 'Team 1',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
                 ),
               ),
               ClipRRect(
@@ -95,15 +101,26 @@ class ItemScheduleWidget extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              const Text(
-                "Single",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: 20,
+              Expanded(
+                child: Text(
+                  match.secondTeam ?? 'Team 2',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Court: ${match.court ?? 'TBA'}',
+            style: TextStyle(
+              color: ColorUtils.primaryColor,
+              fontSize: 14,
+            ),
           ),
         ],
       ),

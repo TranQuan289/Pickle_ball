@@ -1,86 +1,140 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pickle_ball/models/pickleball_match_model.dart';
 import 'package:pickle_ball/utils/assets_utils.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
+import 'package:pickle_ball/views/find_tournament/views/schedule_view.dart';
 import 'package:pickle_ball/views/find_tournament/widgets/item_header_tournament_widget.dart';
+import 'package:pickle_ball/providers/pickleball_match_provider.dart';
 
-class TournamentView extends ConsumerWidget {
-  const TournamentView({super.key});
+class TournamentView extends ConsumerStatefulWidget {
+  final int tournamentId;
+
+  const TournamentView({super.key, required this.tournamentId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TournamentView> createState() => _TournamentViewState();
+}
+
+class _TournamentViewState extends ConsumerState<TournamentView> {
+  PickleballMatch? selectedMatch;
+
+  void onMatchSelected(PickleballMatch match) {
+    setState(() {
+      selectedMatch = match;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final matchesAsyncValue =
+        ref.watch(pickleballMatchProvider(widget.tournamentId));
+
     return Scaffold(
       backgroundColor: ColorUtils.primaryBackgroundColor,
-      body: Stack(
-        children: [
-          Container(
-            height: ScreenUtil().screenHeight,
-            width: ScreenUtil().screenWidth,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(AssetUtils.imgTournament),
-                fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Container(
+              height: ScreenUtil().screenHeight,
+              width: ScreenUtil().screenWidth,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(AssetUtils.imgTournament),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              const ItemHeaderTournamentWidget(),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                margin: const EdgeInsets.all(12),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.r),
-                  color: Colors.orange,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 20,
                 ),
-                child: const Text(
-                  'Name2',
-                  style: TextStyle(
-                    color: Colors.white,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
-              ),
-              CustomPaint(
-                size: Size(ScreenUtil().screenWidth, 50.h),
-                painter: DoubleLinePainter(),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(12),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      color: Colors.white,
-                    ),
-                    child: const Text('Name1'),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(12),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      color: Colors.white,
-                    ),
-                    child: const Text('Name1'),
-                  )
-                ],
-              )
-            ],
-          ),
-        ],
+                const SizedBox(
+                  height: 20,
+                ),
+                const ItemHeaderTournamentWidget(),
+                const SizedBox(
+                  height: 20,
+                ),
+                matchesAsyncValue.when(
+                  data: (matches) {
+                    if (matches.isNotEmpty) {
+                      final matchToDisplay = selectedMatch ?? matches.first;
+                      return Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.r),
+                              color: Colors.orange,
+                            ),
+                            child: Text(
+                              matchToDisplay.winningTeam == ""
+                                  ? "Đang chờ kết quả"
+                                  : matchToDisplay.winningTeam,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          CustomPaint(
+                            size: Size(ScreenUtil().screenWidth, 50.h),
+                            painter: DoubleLinePainter(),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.all(12),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  color: Colors.white,
+                                ),
+                                child: Text(matchToDisplay.firstTeam),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.all(12),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  color: Colors.white,
+                                ),
+                                child: Text(matchToDisplay.secondTeam),
+                              )
+                            ],
+                          )
+                        ],
+                      );
+                    } else {
+                      return const Text('No matches available');
+                    }
+                  },
+                  loading: () => const CircularProgressIndicator(),
+                  error: (error, stack) => Text('Error: $error'),
+                ),
+                ScheduleView(
+                  tournamentId: widget.tournamentId,
+                  onMatchSelected: onMatchSelected,
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

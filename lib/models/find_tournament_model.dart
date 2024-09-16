@@ -4,7 +4,7 @@ class FindTournamentModel {
   final DateTime startDate;
   final DateTime endDate;
   final DateTime? registrationExpiredDate;
-  final List<Location> locations; // Updated to List<Location>
+  final List<Location> locations;
   final DateTime creationDate;
   final DateTime? modificationDate;
   final DateTime? deletionDate;
@@ -16,7 +16,7 @@ class FindTournamentModel {
     required this.startDate,
     required this.endDate,
     this.registrationExpiredDate,
-    required this.locations, // Updated to required List<Location>
+    required this.locations,
     required this.creationDate,
     this.modificationDate,
     this.deletionDate,

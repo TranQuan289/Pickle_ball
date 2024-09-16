@@ -21,4 +21,5 @@ class AssetUtils {
   static const icUser = 'assets/icons/ic_user_account.svg';
   static const imgHeaderFind = 'assets/images/img_header_find.png';
   static const imgTournament = 'assets/images/img_tournament.png';
+  static const imgGroupStage = 'assets/images/img_group_stage.jpg';
 }
