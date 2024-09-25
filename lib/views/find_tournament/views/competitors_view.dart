@@ -18,7 +18,7 @@ class CompetitorsView extends ConsumerWidget {
       backgroundColor: ColorUtils.primaryBackgroundColor,
       body: athletesAsyncValue.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, stack) => Center(child: Text('Chưa có người tham gia')),
         data: (athletes) {
           return Padding(
             padding: EdgeInsets.all(10.w),

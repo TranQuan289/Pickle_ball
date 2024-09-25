@@ -101,9 +101,7 @@ class _FindTournamentDetailViewState
                 CompetitorsView(
                   campaignId: widget.tournamentId,
                 ),
-                // const TournamentView(),
-                // const ScheduleView(),
-                const AboutView(),
+                AboutView(tournamentId: widget.tournamentId),
               ],
             ),
           ),
