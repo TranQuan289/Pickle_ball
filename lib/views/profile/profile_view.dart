@@ -34,6 +34,53 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     }
   }
 
+  Future<void> _showResetPasswordDialog(String email) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Reset Password'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Do you want to reset the password for $email?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Reset'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _resetPassword(email);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _resetPassword(String email) async {
+    try {
+      await ref.read(profileProvider(userId!).notifier).resetPassword(email);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password reset email sent successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final profileAsync =
@@ -154,6 +201,21 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                               builder: (context) => const ProfileDetailView(),
                             ),
                           );
+                        },
+                      ),
+                      Container(
+                        height: 1,
+                        width: double.infinity,
+                        color: ColorUtils.blueColor,
+                      ),
+                      ButtonSettingsWidget(
+                        icon: Icon(
+                          Icons.lock,
+                          color: Colors.black.withOpacity(0.7),
+                        ),
+                        title: 'Reset Password',
+                        onPressed: () {
+                          _showResetPasswordDialog(userProfile.email ?? '');
                         },
                       ),
                       Container(

@@ -21,6 +21,14 @@ class ProfileNotifier extends StateNotifier<AsyncValue<UserProfile>> {
       state = AsyncValue.error(e, StackTrace.current);
     }
   }
+
+  Future<void> resetPassword(String email) async {
+    try {
+      await _profileService.resetPassword(email);
+    } catch (e) {
+      throw Exception('Failed to reset password: ${e.toString()}');
+    }
+  }
 }
 
 final profileProvider = StateNotifierProvider.family<ProfileNotifier,

@@ -68,4 +68,20 @@ class ProfileService {
     }
     return null;
   }
+
+  Future<void> resetPassword(String email) async {
+    try {
+      final response = await _dio.post(
+        '$_baseUrl/users/reset-password',
+        options: Options(headers: {'accept': 'text/plain'}),
+        data: {'email': email},
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to reset password');
+      }
+    } catch (e) {
+      throw Exception('Failed to reset password: ${e.toString()}');
+    }
+  }
 }
