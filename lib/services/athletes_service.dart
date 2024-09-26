@@ -19,4 +19,18 @@ class AthletesService {
       throw Exception('Failed to load athletes');
     }
   }
+
+  Future<List<Athlete>> getAthleteById(int athleteId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/athletes/$athleteId'),
+      headers: {'accept': '*/*'},
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonData = json.decode(response.body);
+      return jsonData.map((json) => Athlete.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load athletes');
+    }
+  }
 }

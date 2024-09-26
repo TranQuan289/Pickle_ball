@@ -6,16 +6,33 @@ import 'package:pickle_ball/utils/assets_utils.dart';
 import 'package:pickle_ball/utils/color_utils.dart';
 import 'package:pickle_ball/providers/round_provider.dart';
 import 'package:pickle_ball/views/find_tournament/views/tournament_view.dart';
+import 'package:pickle_ball/views/find_tournament/views/schedule_view.dart';
+import 'package:pickle_ball/views/find_tournament/views/competitors_stage_view.dart';
+import 'package:pickle_ball/models/pickleball_match_model.dart';
 
-class GroupStageView extends ConsumerWidget {
+class GroupStageView extends ConsumerStatefulWidget {
   final int tournamentId;
 
   const GroupStageView({super.key, required this.tournamentId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final roundsAsyncValue = ref.watch(roundsProvider(tournamentId));
-    final teamsAsyncValue = ref.watch(teamsProvider(tournamentId));
+  ConsumerState<GroupStageView> createState() => _GroupStageViewState();
+}
+
+class _GroupStageViewState extends ConsumerState<GroupStageView> {
+  PickleballMatch? selectedMatch;
+  bool showSchedule = true;
+
+  void onMatchSelected(PickleballMatch match) {
+    setState(() {
+      selectedMatch = match;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final roundsAsyncValue = ref.watch(roundsProvider(widget.tournamentId));
+    final teamsAsyncValue = ref.watch(teamsProvider(widget.tournamentId));
 
     return Scaffold(
       backgroundColor: ColorUtils.primaryBackgroundColor,
@@ -33,70 +50,164 @@ class GroupStageView extends ConsumerWidget {
             ),
           ),
           // Content
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
-                const SizedBox(height: 20),
-                roundsAsyncValue.when(
-                  data: (rounds) {
-                    final firstRound = rounds.isNotEmpty ? rounds.first : null;
-                    return teamsAsyncValue.when(
-                      data: (teamGroups) {
-                        if (teamGroups.isEmpty) {
-                          return const Text('No groups available');
-                        }
-                        final firstGroup = teamGroups.entries.first;
-                        return Column(
-                          children: [
-                            if (firstRound != null &&
-                                firstRound.roundStatus == "Completed")
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => TournamentView(
-                                              tournamentId: tournamentId),
-                                        ),
-                                      );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF1244A2),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      foregroundColor: Colors.white,
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      roundsAsyncValue.when(
+                        data: (rounds) {
+                          final firstRound =
+                              rounds.isNotEmpty ? rounds.first : null;
+                          return teamsAsyncValue.when(
+                            data: (teamGroups) {
+                              if (teamGroups.isEmpty) {
+                                return SizedBox(
+                                  height: ScreenUtil().screenHeight / 4,
+                                  child: const Center(
+                                    child: Text(
+                                      'No groups available',
+                                      style: TextStyle(color: Colors.white),
                                     ),
-                                    child: const Text("Next Match"),
                                   ),
+                                );
+                              }
+                              final firstGroup = teamGroups.entries.first;
+                              return Column(
+                                children: [
+                                  if (firstRound != null &&
+                                      firstRound.roundStatus == "Completed")
+                                    Align(
+                                      alignment: Alignment.topRight,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 8.0),
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TournamentView(
+                                                        tournamentId: widget
+                                                            .tournamentId),
+                                              ),
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color(0xFF1244A2),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            foregroundColor: Colors.white,
+                                          ),
+                                          child: const Text("Next Match"),
+                                        ),
+                                      ),
+                                    ),
+                                  _buildGroupTable(
+                                      firstGroup.key, firstGroup.value),
+                                  const SizedBox(height: 20),
+                                ],
+                              );
+                            },
+                            loading: () => SizedBox(
+                              height: ScreenUtil().screenHeight / 2,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                            error: (error, _) => SizedBox(
+                              height: ScreenUtil().screenHeight / 2,
+                              child: Center(
+                                child: Text(
+                                  'Error: $error',
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                               ),
-                            _buildGroupTable(firstGroup.key, firstGroup.value),
-                          ],
-                        );
-                      },
-                      loading: () => const CircularProgressIndicator(),
-                      error: (error, _) => Text('Error: $error'),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, _) => Text('Error: $error'),
+                            ),
+                          );
+                        },
+                        loading: () => SizedBox(
+                          height: ScreenUtil().screenHeight / 2,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                        error: (error, _) => SizedBox(
+                          height: ScreenUtil().screenHeight / 2,
+                          child: Center(
+                            child: Text(
+                              'Error: $error',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                showSchedule = true;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: showSchedule
+                                  ? const Color(0xFF1244A2)
+                                  : Colors.grey,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              foregroundColor: Colors.white,
+                            ),
+                            child: const Text('Match Schedule'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                showSchedule = false;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: !showSchedule
+                                  ? const Color(0xFF1244A2)
+                                  : Colors.grey,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              foregroundColor: Colors.white,
+                            ),
+                            child: const Text('Competitors'),
+                          ),
+                        ],
+                      ),
+                      showSchedule
+                          ? ScheduleView(
+                              tournamentId: widget.tournamentId,
+                              onMatchSelected: onMatchSelected,
+                            )
+                          : CompetitorsStageView(
+                              tournamentId: widget.tournamentId),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

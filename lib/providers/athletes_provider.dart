@@ -7,3 +7,13 @@ final athletesProvider =
   final athletesService = AthletesService();
   return await athletesService.getAthletesByCampaign(campaignId);
 });
+
+final athleteByIdProvider =
+    FutureProvider.family<List<Athlete>, int>((ref, athleteId) async {
+  final athletesService = AthletesService();
+  final athletes = await athletesService.getAthleteById(athleteId);
+  if (athletes.isEmpty) {
+    throw Exception('Athlete not found');
+  }
+  return athletes;
+});
