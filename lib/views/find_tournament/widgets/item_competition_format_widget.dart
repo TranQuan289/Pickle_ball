@@ -28,7 +28,7 @@ class ItemCompetitionFormatWidget extends StatelessWidget {
         } else if (tournament.tournamentType == 'GroupStage') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const GroupStageView()),
+            MaterialPageRoute(builder: (context) => GroupStageView(tournamentId: tournament.tournamentId ?? 0)),
           );
         }
       },

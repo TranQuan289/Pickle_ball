@@ -96,25 +96,37 @@ class _TournamentViewState extends ConsumerState<TournamentView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Container(
-                                margin: const EdgeInsets.all(12),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 12),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                  color: Colors.white,
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.all(12),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.r),
+                                    color: Colors.white,
+                                  ),
+                                  child: Text(
+                                    matchToDisplay.firstTeam,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
                                 ),
-                                child: Text(matchToDisplay.firstTeam),
                               ),
-                              Container(
-                                margin: const EdgeInsets.all(12),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 12),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                  color: Colors.white,
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.all(12),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.r),
+                                    color: Colors.white,
+                                  ),
+                                  child: Text(
+                                    matchToDisplay.secondTeam,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
                                 ),
-                                child: Text(matchToDisplay.secondTeam),
                               )
                             ],
                           )

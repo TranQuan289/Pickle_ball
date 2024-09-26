@@ -58,6 +58,15 @@ class ItemScheduleWidget extends StatelessWidget {
           ),
           Text(DateFormat('EEEE, dd/MM').format(match.matchDate)),
           const SizedBox(height: 10),
+          Text(
+            'Round ${match.roundOrder}',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: ColorUtils.primaryColor,
+              fontSize: 18,
+            ),
+          ),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
