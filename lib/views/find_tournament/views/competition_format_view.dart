@@ -62,7 +62,7 @@ class _CompetitionFormatViewState extends ConsumerState<CompetitionFormatView> {
                     },
                     loading: () => const CircularProgressIndicator(),
                     error: (error, stack) =>
-                        Center(child: const Text('Chưa có giải đấu nào')),
+                        const Center(child: Text('Chưa có giải đấu nào')),
                   );
                 },
               ),

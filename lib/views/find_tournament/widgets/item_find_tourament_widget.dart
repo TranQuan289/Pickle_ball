@@ -6,6 +6,8 @@ import 'package:pickle_ball/views/find_tournament/widgets/item_header_widget.dar
 import 'package:pickle_ball/models/find_tournament_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pickle_ball/providers/campaign_registration_provider.dart';
+import 'package:pickle_ball/providers/auth_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ItemFindTournamentWidget extends ConsumerWidget {
   final FindTournamentModel tournament;
@@ -17,6 +19,11 @@ class ItemFindTournamentWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final isAdmin = authState.isAuthenticated &&
+        authState.userId != null &&
+        authState.userId == '1';
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -45,24 +52,25 @@ class ItemFindTournamentWidget extends ConsumerWidget {
           children: [
             ItemHeaderWidget(tournament: tournament),
             const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: ElevatedButton(
-                onPressed: () => _showRegistrationDialog(context, ref),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple[100],
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+            if (!isAdmin) // Only show the Register button if not admin
+              Align(
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton(
+                  onPressed: () => _showRegistrationDialog(context, ref),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple[100],
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  child: const Text('Register', style: TextStyle(fontSize: 12)),
                 ),
-                child: const Text('Register', style: TextStyle(fontSize: 12)),
               ),
-            ),
           ],
         ),
       ),
@@ -108,21 +116,32 @@ class ItemFindTournamentWidget extends ConsumerWidget {
           await registrationService.registerForCampaign(tournament.id);
       if (result) {
         registrationState.state = const AsyncValue.data(true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Registration successful')),
-        );
+        Fluttertoast.showToast(
+            msg: "Registration successful",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            textColor: Colors.white,
+            fontSize: 16.0);
       } else {
         registrationState.state = const AsyncValue.data(false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('You have already registered for this tournament')),
-        );
+        Fluttertoast.showToast(
+            msg: "You have already registered for this tournament",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     } catch (e) {
       registrationState.state = AsyncValue.error(e, StackTrace.current);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
+      Fluttertoast.showToast(
+          msg: "Error: ${e.toString()}",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 }
